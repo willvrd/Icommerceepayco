@@ -1,0 +1,62 @@
+@php
+	$configuration = icommerceepayco_get_configuration();
+	$options = array('required' =>'required');
+	
+	if($configuration==NULL){
+		$cStatus = 0;
+		$entity = icommerceepayco_get_entity();
+	}else{
+		$cStatus = $configuration->status;
+		$entity = $configuration;
+	}
+
+	$status = icommerce_get_status();
+	$formID = uniqid("form_id");
+
+@endphp
+
+
+{!! Form::open(['route' => ['admin.icommerceepayco.epaycoconfig.update'], 'method' => 'put','name' => $formID]) !!}
+
+
+<div class="col-xs-12 col-sm-9">
+
+	
+	@include('icommerce::admin.products.partials.flag-icon',['entity' => $entity,'att' => 'description'])
+	
+	{!! Form::normalInput('description','*'.trans('icommerceepayco::epaycoconfigs.table.description'), $errors,$configuration,$options) !!}
+	
+	<div class="form-group">
+        <label for="test">*{{trans('icommerceepayco::epaycoconfigs.table.test')}}</label>
+        <select class="form-control" id="test" name="test" required>
+        	<option value="1" @if(!empty($configuration) && $configuration->test==1) selected @endif>YES</option>
+            <option value="0" @if(!empty($configuration) && $configuration->test==0) selected @endif>NO</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+	    <div>
+		    <label class="checkbox-inline">
+		    	<input name="status" type="checkbox" @if($cStatus==1) checked @endif>{{trans('icommerceepayco::epaycoconfigs.table.activate')}}
+		    </label>
+		</div>   
+	</div>
+
+</div>
+
+<div class="col-sm-3">
+
+	@include('icommerceepayco::admin.epaycoconfigs.partials.featured-img',['crop' => 0,'name' => 'mainimage','action' => 'create'])
+
+</div>
+   	
+	
+ <div class="clearfix"></div>   
+
+    <div class="box-footer">
+    <button type="submit" class="btn btn-primary btn-flat">{{ trans('icommerceepayco::epaycoconfigs.button.save configuration') }}</button>
+    </div>
+
+
+
+{!! Form::close() !!}
