@@ -17,6 +17,7 @@ return [
     ],
     'table' => [
          'description' => 'Description',
+         'publicKey' => 'Public Key',
          'activate' => 'Activate',
          'test' => 'Mode test',
     ],

@@ -19,6 +19,7 @@ class Epaycoconfig
     public function __construct()
     {
         $this->description = setting('icommerceEpayco::description');
+        $this->publicKey = setting('icommerceEpayco::publicKey');
         $this->test = setting('icommerceEpayco::test');
 
         $this->image = setting('icommerceEpayco::image');
@@ -29,6 +30,7 @@ class Epaycoconfig
     {
         return (object) [
             'description' => $this->description,
+            'publicKey' => $this->publicKey,
             'test' => $this->test,
             'image' => url($this->image),
             'status' => $this->status

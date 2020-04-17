@@ -63,8 +63,12 @@ class PublicController extends BasePublicController
             $orderID = session('orderID');
             $order = $this->order->find($orderID);
 
-            dd($orderID);
+            $description = "Order:{$orderID} - {$order->email}";
 
+            $config = new Epaycoconfig();
+            $config = $config->getData();
+
+            dd($config);
 
         }else{
            return redirect()->route('homepage');
