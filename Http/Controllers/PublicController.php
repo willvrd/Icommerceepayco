@@ -31,8 +31,10 @@ class PublicController extends BasePublicController
     private $user;
     protected $auth;
    
-    protected $urlSandbox;
-    protected $urlProduction;
+    protected $epaycoUrl;
+    protected $confirmationUrl;
+    protected $responseUrl;
+   
 
     public function __construct(
         Setting $setting, 
@@ -45,6 +47,9 @@ class PublicController extends BasePublicController
         $this->auth = $auth;
         $this->user = $user;
         $this->order = $order;
+        $this->epaycoUrl = "https://checkout.epayco.co/checkout.js";
+        $this->confirmationUrl = url('/');
+        $this->responseUrl = url('/');
     }
 
     /**
@@ -55,23 +60,38 @@ class PublicController extends BasePublicController
     public function index(Requests $request)
     {
 
+        try {
 
-        // Testing orderId = 12
+            // Testing orderId = 12
+            $orderID = 12;
+            //$orderID = session('orderID');
+            //\Log::info('Module Icommerceepayco: Index-ID:'.$orderID);
 
-        if($request->session()->exists('orderID')) {
-
-            $orderID = session('orderID');
             $order = $this->order->find($orderID);
-
-            $description = "Order:{$orderID} - {$order->email}";
-
+            $title = "Order:{$orderID} - {$order->email}";
+            
             $config = new Epaycoconfig();
             $config = $config->getData();
 
-            dd($config);
+            // Add other params
+            $config->title = $title ;
+            $config->description = $title;
+            $config->confirmationUrl = $this->confirmationUrl;
+            $config->responseUrl = $this->responseUrl;
 
-        }else{
-           return redirect()->route('homepage');
+            $tpl = 'icommerceepayco::frontend.index';
+
+            return view($tpl, compact('config','order'));
+
+        } catch (\Exception $e) {
+
+            dd($e);
+
+            \Log::error('Module Icommerceepayco-Index: Message: '.$e->getMessage());
+            \Log::error('Module Icommerceepayco-Index: Code: '.$e->getCode());
+
+            return redirect()->route("homepage");
+
         }
 
     }
