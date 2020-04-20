@@ -68,7 +68,7 @@ class PublicController extends BasePublicController
             //\Log::info('Module Icommerceepayco: Index-ID:'.$orderID);
 
             $order = $this->order->find($orderID);
-            $title = "Order:{$orderID} - {$order->email}";
+            $title = "Orden #{$orderID} - {$order->email}";
             
             $config = new Epaycoconfig();
             $config = $config->getData();
@@ -76,16 +76,17 @@ class PublicController extends BasePublicController
             // Add other params
             $config->title = $title ;
             $config->description = $title;
+            $config->epaycoUrl = $this->epaycoUrl;
             $config->confirmationUrl = $this->confirmationUrl;
             $config->responseUrl = $this->responseUrl;
-
+            $config->test = (boolean)$config->test;
+            
+            //View
             $tpl = 'icommerceepayco::frontend.index';
 
             return view($tpl, compact('config','order'));
 
         } catch (\Exception $e) {
-
-            dd($e);
 
             \Log::error('Module Icommerceepayco-Index: Message: '.$e->getMessage());
             \Log::error('Module Icommerceepayco-Index: Code: '.$e->getCode());
