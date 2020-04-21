@@ -38,9 +38,9 @@ class IcommerceEpaycoApiController extends BaseApiController
      */
     public function confirmation(Request $request){
 
+        \Log::info('Module Icommerceepayco: *** CONFIRMATION: INIT ***');
+        
         try {
-
-            \Log::info('Module Icommerceepayco: *** CONFIRMATION - INIT: '.time().' ***');
 
             $config = new Epaycoconfig();
             $config = $config->getData();
@@ -55,6 +55,8 @@ class IcommerceEpaycoApiController extends BaseApiController
             $x_signature      = $request->x_signature;
             $x_id_invoice     = $request->x_id_invoice;
             $x_extra1         = $request->x_extra1;
+            $x_cod_response = $request->x_cod_response;
+            $orderId = $x_extra1;
 
             $signature = hash('sha256', $p_cust_id_cliente . '^' . $p_key . '^' . $x_ref_payco . '^' . $x_transaction_id . '^' . $x_amount . '^' . $x_currency_code);
 
@@ -65,9 +67,6 @@ class IcommerceEpaycoApiController extends BaseApiController
                 \Log::info('Module Icommerceepayco: x_transaction_id: '.$x_transaction_id);
                 \Log::info('Module Icommerceepayco: x_extra1: '.$x_extra1);
                 
-                $x_cod_response = $request->x_cod_response;
-                $orderId = $x_extra1;
-
                 switch ((int) $x_cod_response) {
 
                     case 1:
@@ -111,29 +110,33 @@ class IcommerceEpaycoApiController extends BaseApiController
 
                 }
 
-                $inforEmail = array(
-                    'msjTheme' => $msjTheme,
-                    'msjSubject' => $msjSubject,
-                    'msjIntro' => $msjIntro
-                );
-
-                $this->finalProccess($request,$orderId,$newStatus,$inforEmail);
-
-                \Log::info('Module Icommerceepayco: *** CONFIRMATION FINISHED ****');
-
                 $response = [
                     'msj' => "Proceso Valido",
                 ];
-
             /*
             } else {
+
                 \Log::error('Module Icommerceepayco: Firma No Valida');
+                $newStatus = 6;
+                $msjTheme = "icommerce::email.error_order";
+                $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.signError')."- Order:".$orderId;
+                $msjIntro = trans('icommerceepayco::epaycoconfigs.emailIntro.signError');
                 $response = [
                     'errors' => "Firma no Valida",
                 ];
             }
             */
 
+            $inforEmail = array(
+                'msjTheme' => $msjTheme,
+                'msjSubject' => $msjSubject,
+                'msjIntro' => $msjIntro
+            );
+
+            $this->finalProccess($request,$orderId,$newStatus,$inforEmail);
+
+            \Log::info('Module Icommerceepayco: *** CONFIRMATION: FINISHED ****');
+            
         } catch (\Exception $e) {
 
             //Message Error

@@ -29,6 +29,15 @@ return [
     'validation' => [
     ],
 
+    'emailIntro' => [
+        'failed' => 'Reporte del Sistema de Pagos: Transaccion Fallida',
+        'complete' => 'Reporte del Sistema de Pagos: Transaccion Completa',
+        'refunded' => 'Reporte del Sistema de Pagos: Transaccion Rechazada',
+        'pending' => 'Reporte del Sistema de Pagos: Transaccion Pendiente',
+        'history' => 'El estado de la orden ha cambiado',
+        'signError' => 'Reporte del Sistema de Pagos: Firma No Valida',
+      ],
+
     'emailSubject' => [
         'failed' => 'Transaccion fallida',
         'complete' => 'Transaccion completa',
@@ -36,5 +45,8 @@ return [
         'pending' => 'Transaccion pendiente',
         'history' => 'Estado de la orden',
         'denied' => 'Transaccion denegada',
+        'signError' => 'Firma No Valida',
     ],
+
+
 ];
