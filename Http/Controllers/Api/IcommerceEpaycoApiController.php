@@ -39,101 +39,141 @@ class IcommerceEpaycoApiController extends BaseApiController
     public function confirmation(Request $request){
 
         \Log::info('Module Icommerceepayco: *** CONFIRMATION: INIT ***');
-        
+        $response = ['msj' => "Proceso Valido"];
+
         try {
 
-            $config = new Epaycoconfig();
-            $config = $config->getData();
+            $orderId = $request->x_extra1;
+            $order = $this->order->find($orderId);
             
-            $p_cust_id_cliente = $config->clientId;
-            $p_key             = $config->publicKey;
+            // Not PROCESSED
+            if($order->order_status!=13){
 
-            $x_ref_payco      = $request->x_ref_payco;
-            $x_transaction_id = $request->x_transaction_id;
-            $x_amount         = $request->x_amount;
-            $x_currency_code  = $request->x_currency_code;
-            $x_signature      = $request->x_signature;
-            $x_id_invoice     = $request->x_id_invoice;
-            $x_extra1         = $request->x_extra1;
-            $x_cod_response = $request->x_cod_response;
-            $orderId = $x_extra1;
-
-            $signature = hash('sha256', $p_cust_id_cliente . '^' . $p_key . '^' . $x_ref_payco . '^' . $x_transaction_id . '^' . $x_amount . '^' . $x_currency_code);
-
-            //if ($x_signature == $signature) {
-
-                \Log::info('Module Icommerceepayco: x_id_invoice: '.$x_id_invoice);
-                \Log::info('Module Icommerceepayco: x_ref_payco  '.$x_ref_payco);
-                \Log::info('Module Icommerceepayco: x_transaction_id: '.$x_transaction_id);
-                \Log::info('Module Icommerceepayco: x_extra1: '.$x_extra1);
+                $config = new Epaycoconfig();
+                $config = $config->getData();
                 
-                switch ((int) $x_cod_response) {
+                $p_cust_id_cliente = $config->clientId;
+                $p_key             = $config->publicKey;
 
-                    case 1:
-                        \Log::info('Module Icommerceepayco: Response: ACEPTADA');
-                        $newStatus = 1;
-                        $msjTheme = "icommerce::email.success_order";
-                        $msjSubject = trans('icommerce::common.emailSubject.complete')."- Order:".$orderId;
-                        $msjIntro = trans('icommerce::common.emailIntro.complete');
-                    break;
+                $x_ref_payco      = $request->x_ref_payco;
+                $x_transaction_id = $request->x_transaction_id;
+                $x_amount         = $request->x_amount;
+                $x_currency_code  = $request->x_currency_code;
+                $x_signature      = $request->x_signature;
+                $x_id_invoice     = $request->x_id_invoice;
+                $x_cod_response   = $request->x_cod_response;
+                $x_response       = $request->x_response;
+                $x_cod_transaction_state = $request->x_cod_transaction_state;
+                $x_transaction_state = $request->x_transaction_state;
+                
 
-                    case 2:
-                        \Log::info('Module Icommerceepayco: Response: RECHAZADA');
-                        $newStatus = 4;
-                        $msjTheme = "icommerce::email.error_order";
-                        $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.denied')."- Order:".$orderId;
-                        $msjIntro = trans('icommerce::common.emailIntro.denied');
-                    break;
+                $signature = hash('sha256', $p_cust_id_cliente . '^' . $p_key . '^' . $x_ref_payco . '^' . $x_transaction_id . '^' . $x_amount . '^' . $x_currency_code);
 
-                    case 3:
-                        \Log::info('Module Icommerceepayco: Response: PENDIENTE');
-                        $newStatus = 10;
-                        $msjTheme = "icommerce::email.error_order";
-                        $msjSubject = trans('icommerce::common.emailSubject.pending')."- Order:".$orderId;
-                        $msjIntro = trans('icommerce::common.emailIntro.pending');
-                    break;
+                //if ($x_signature == $signature) {
 
-                    case 4:
-                        \Log::info('Module Icommerceepayco: Response: FALLIDA');
-                        $newStatus = 6;
-                        $msjTheme = "icommerce::email.error_order";
-                        $msjSubject = trans('icommerce::common.emailSubject.failed')."- Order:".$orderId;
-                        $msjIntro = trans('icommerce::common.emailIntro.failed');
-                    break;
+                    \Log::info('Module Icommerceepayco: id_invoice: '.$x_id_invoice);
+                    \Log::info('Module Icommerceepayco: ref_payco: '.$x_ref_payco);
+                    \Log::info('Module Icommerceepayco: ORDERID: '.$orderId);
+                    \Log::info('Module Icommerceepayco: transaction_id: '.$x_transaction_id);
+                    \Log::info('Module Icommerceepayco: cod_response: '.$x_cod_response);
+                    \Log::info('Module Icommerceepayco: response: '.$x_response);
+                    \Log::info('Module Icommerceepayco: cod_transaction_state: '.$x_cod_transaction_state);
+                    \Log::info('Module Icommerceepayco: transaction_state: '.$x_transaction_state);
 
-                    default:
-                        \Log::info('Module Icommerceepayco: Response: DEFAULT');
-                        $newStatus = 6;
-                        $msjTheme = "icommerce::email.error_order";
-                        $msjSubject = trans('icommerce::common.emailSubject.failed')."- Order:".$orderId;
-                        $msjIntro = trans('icommerce::common.emailIntro.failed');
+                    $msjTheme = "icommerce::email.error_order";
 
+                    switch ((int) $x_cod_transaction_state) {
+
+                        case 1: // Aceptada
+                            $newStatus = 1;
+                            $msjTheme = "icommerce::email.success_order";
+                            $msjSubject = trans('icommerce::common.emailSubject.complete')."- Order:".$orderId;
+                            $msjIntro = trans('icommerce::common.emailIntro.complete');
+                        break;
+
+                        case 2: // Rechazada
+                            $newStatus = 4;
+                            $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.denied')."- Order:".$orderId;
+                            $msjIntro = trans('icommerce::common.emailIntro.denied');
+                        break;
+
+                        case 3: // Pendiente
+                            $newStatus = 10;
+                            $msjSubject = trans('icommerce::common.emailSubject.pending')."- Order:".$orderId;
+                            $msjIntro = trans('icommerce::common.emailIntro.pending');
+                        break;
+
+                        case 4: // Fallida
+                            $newStatus = 6;
+                            $msjSubject = trans('icommerce::common.emailSubject.failed')."- Order:".$orderId;
+                            $msjIntro = trans('icommerce::common.emailIntro.failed');
+                        break;
+
+                        case 6: // Reversada
+                            $newStatus = 8;
+                            $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.reversed')."- Order:".$orderId;
+                            $msjIntro = trans('icommerceepayco::epaycoconfigs.emailIntro.reversed');
+                        break;
+
+                        case 7: // Retenida
+                            $newStatus = 10;// Pendiente
+                            $msjSubject = trans('icommerce::common.emailSubject.pending')."- Order:".$orderId;
+                            $msjIntro = trans('icommerce::common.emailIntro.pending');
+                        break;
+
+                        case 8: // Iniciada
+                            $newStatus = 10;// Pendiente
+                            $msjSubject = trans('icommerce::common.emailSubject.pending')."- Order:".$orderId;
+                            $msjIntro = trans('icommerce::common.emailIntro.pending');
+                        break;
+
+                        case 9: // Expirada
+                            $newStatus = 13;
+                            $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.expired')."- Order:".$orderId;
+                            $msjIntro = trans('icommerceepayco::epaycoconfigs.emailIntro.expired');
+                        break;
+
+                        case 10: // Abandonada 
+                            $newStatus = 2; // Cancelada
+                            $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.canceled')."- Order:".$orderId;
+                            $msjIntro = trans('icommerceepayco::epaycoconfigs.emailIntro.canceled');
+                        break;
+
+                        case 11: // Cancelada
+                            $newStatus = 2; 
+                            $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.canceled')."- Order:".$orderId;
+                            $msjIntro = trans('icommerceepayco::epaycoconfigs.emailIntro.canceled');
+                        break;
+
+                        case 12: // Antifraude
+                            $newStatus = 6; // Fallida
+                            $msjSubject = trans('icommerce::common.emailSubject.failed')."- Order:".$orderId;
+                            $msjIntro = trans('icommerce::common.emailIntro.failed');
+                        break;
+
+                    }
+                
+                /*
+                } else {
+
+                    \Log::error('Module Icommerceepayco: Firma No Valida');
+                    $newStatus = 6;
+                    $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.signError')."- Order:".$orderId;
+                    $msjIntro = trans('icommerceepayco::epaycoconfigs.emailIntro.signError');
+                    $response = [
+                        'errors' => "Firma no Valida",
+                    ];
                 }
+                */
 
-                $response = [
-                    'msj' => "Proceso Valido",
-                ];
-            /*
-            } else {
+                $inforEmail = array(
+                    'msjTheme' => $msjTheme,
+                    'msjSubject' => $msjSubject,
+                    'msjIntro' => $msjIntro
+                );
 
-                \Log::error('Module Icommerceepayco: Firma No Valida');
-                $newStatus = 6;
-                $msjTheme = "icommerce::email.error_order";
-                $msjSubject = trans('icommerceepayco::epaycoconfigs.emailSubject.signError')."- Order:".$orderId;
-                $msjIntro = trans('icommerceepayco::epaycoconfigs.emailIntro.signError');
-                $response = [
-                    'errors' => "Firma no Valida",
-                ];
+                $this->finalProcess($request,$orderId,$newStatus,$inforEmail);
             }
-            */
-
-            $inforEmail = array(
-                'msjTheme' => $msjTheme,
-                'msjSubject' => $msjSubject,
-                'msjIntro' => $msjIntro
-            );
-
-            $this->finalProccess($request,$orderId,$newStatus,$inforEmail);
 
             \Log::info('Module Icommerceepayco: *** CONFIRMATION: FINISHED ****');
             
@@ -157,7 +197,13 @@ class IcommerceEpaycoApiController extends BaseApiController
 
     }
 
-    public function finalProccess($request,$orderId,$newStatus,$inforEmail){
+    /**
+     * Final Process Updates and email
+     * @param Requests request 
+     */
+    public function finalProcess($request,$orderId,$newStatus,$inforEmail){
+
+        \Log::info('Module Icommerceepayco: Final Process: INIT');
 
         $success_process = icommerce_executePostOrder($orderId,$newStatus,$request);
 

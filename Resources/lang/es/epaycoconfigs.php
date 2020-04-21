@@ -45,7 +45,11 @@ return [
         'pending' => 'Transaccion pendiente',
         'history' => 'Estado de la orden',
         'denied' => 'Transaccion denegada',
+        'reversed' => 'Transaccion reversada',
+        'expired' => 'Transaccion expirada',
+        'canceled' => 'Transaccion cancelada',
         'signError' => 'Firma No Valida',
+        
     ],
 
 

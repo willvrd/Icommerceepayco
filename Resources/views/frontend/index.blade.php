@@ -31,7 +31,8 @@
                   data-epayco-response="{{$config->responseUrl}}"
                   data-epayco-confirmation="{{$config->confirmationUrl}}"
                   data-epayco-invoice="{{$orderID}}"
-                  data-epayco-extra1="{{$order->id}}">
+                  data-epayco-extra1="{{$order->id}}"
+                  data-epayco-autoclick="true">
             </script>
           </form>
           
