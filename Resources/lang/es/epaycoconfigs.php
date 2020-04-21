@@ -20,6 +20,7 @@ return [
          'publicKey' => 'Public Key',
          'activate' => 'Activate',
          'test' => 'Mode test',
+         'clientId' => 'Client Id',
     ],
     'form' => [
     ],

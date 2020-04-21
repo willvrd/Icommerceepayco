@@ -2,32 +2,28 @@
 
 namespace Modules\Icommerceepayco\Http\Controllers;
 
-use Mockery\CountValidator\Exception;
+// Requests & Response
+use Illuminate\Http\Request;
 
-use Modules\Icommerceepayco\Entities\Epayco;
+// Base Controller
+use Modules\Core\Http\Controllers\BasePublicController;
+
+// Entities
 use Modules\Icommerceepayco\Entities\Epaycoconfig;
 
-use Modules\Core\Http\Controllers\BasePublicController;
-use Route;
-use Session;
-
+// User
 use Modules\User\Contracts\Authentication;
 use Modules\User\Repositories\UserRepository;
-use Modules\Icommerce\Repositories\CurrencyRepository;
-use Modules\Icommerce\Repositories\ProductRepository;
+
+// Order
 use Modules\Icommerce\Repositories\OrderRepository;
-use Modules\Icommerce\Repositories\Order_ProductRepository;
-use Modules\Setting\Contracts\Setting;
-use Illuminate\Http\Request as Requests;
-use Illuminate\Support\Facades\Log;
 
-
+use Session;
 
 class PublicController extends BasePublicController
 {
   
     private $order;
-    private $setting;
     private $user;
     protected $auth;
    
@@ -36,14 +32,12 @@ class PublicController extends BasePublicController
     protected $responseUrl;
    
 
-    public function __construct(
-        Setting $setting, 
+    public function __construct( 
         Authentication $auth, 
         UserRepository $user,  
         OrderRepository $order
     ){
 
-        $this->setting = $setting;
         $this->auth = $auth;
         $this->user = $user;
         $this->order = $order;
@@ -56,7 +50,7 @@ class PublicController extends BasePublicController
      * @param Requests request
      * @return redirect payment 
      */
-    public function index(Requests $request)
+    public function index(Request $request)
     {
 
         try {
@@ -102,7 +96,7 @@ class PublicController extends BasePublicController
      * @param  Request $request
      * @return redirect
      */
-    public function response(Requests $request){
+    public function response(Request $request){
 
         if(isset($request->orderId)){
 

@@ -40,12 +40,12 @@ class IcommerceEpaycoApiController extends BaseApiController
 
         try {
 
-            \Log::info('Module Icommerceepayco: *** CONFIRMATION - '.time());
+            \Log::info('Module Icommerceepayco: *** CONFIRMATION - INIT: '.time().' ***');
 
             $config = new Epaycoconfig();
             $config = $config->getData();
             
-            $p_cust_id_cliente = '9695'; // OJO ESTO FALTA
+            $p_cust_id_cliente = $config->clientId;
             $p_key             = $config->publicKey;
 
             $x_ref_payco      = $request->x_ref_payco;

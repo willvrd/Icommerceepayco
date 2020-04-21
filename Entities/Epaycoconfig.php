@@ -20,8 +20,8 @@ class Epaycoconfig
     {
         $this->description = setting('icommerceEpayco::description');
         $this->publicKey = setting('icommerceEpayco::publicKey');
+        $this->clientId = setting('icommerceEpayco::clientId');
         $this->test = setting('icommerceEpayco::test');
-
         $this->image = setting('icommerceEpayco::image');
         $this->status = setting('icommerceEpayco::status');
     }
@@ -31,6 +31,7 @@ class Epaycoconfig
         return (object) [
             'description' => $this->description,
             'publicKey' => $this->publicKey,
+            'clientId' => $this->clientId,
             'test' => $this->test,
             'image' => url($this->image),
             'status' => $this->status
