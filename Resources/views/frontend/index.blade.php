@@ -29,7 +29,9 @@
                   data-epayco-test="{{$config->test}}"
                   data-epayco-external="false"
                   data-epayco-response="{{$config->responseUrl}}"
-                  data-epayco-confirmation="{{$config->confirmationUrl}}">
+                  data-epayco-confirmation="{{$config->confirmationUrl}}"
+                  data-epayco-invoice="{{$orderID}}"
+                  data-epayco-extra1="{{$order->id}}">
             </script>
           </form>
           

@@ -48,8 +48,7 @@ class PublicController extends BasePublicController
         $this->user = $user;
         $this->order = $order;
         $this->epaycoUrl = "https://checkout.epayco.co/checkout.js";
-        $this->confirmationUrl = url('/');
-        $this->responseUrl = url('/');
+        $this->confirmationUrl = route('icommerceepayco.api.epayco.confirmation');
     }
 
     /**
@@ -62,13 +61,12 @@ class PublicController extends BasePublicController
 
         try {
 
-            // Testing orderId = 12
-            $orderID = 12;
+            $orderID = 12; // Testing orderId = 12
             //$orderID = session('orderID');
-            //\Log::info('Module Icommerceepayco: Index-ID:'.$orderID);
+            \Log::info('Module Icommerceepayco: Index-ID:'.$orderID);
 
             $order = $this->order->find($orderID);
-            $title = "Orden #{$orderID} - {$order->email}";
+            $title = "Orden #{$orderID} - {$order->first_name} {$order->last_name}";
             
             $config = new Epaycoconfig();
             $config = $config->getData();
@@ -78,13 +76,15 @@ class PublicController extends BasePublicController
             $config->description = $title;
             $config->epaycoUrl = $this->epaycoUrl;
             $config->confirmationUrl = $this->confirmationUrl;
-            $config->responseUrl = $this->responseUrl;
+            $config->responseUrl = route("icommerceepayco.response",$orderID);
             $config->test = (boolean)$config->test;
+
+            $orderID = $orderID."-".time();
             
             //View
             $tpl = 'icommerceepayco::frontend.index';
 
-            return view($tpl, compact('config','order'));
+            return view($tpl, compact('config','order','orderID'));
 
         } catch (\Exception $e) {
 
@@ -97,7 +97,37 @@ class PublicController extends BasePublicController
 
     }
 
-    
+    /**
+     * Response View
+     * @param  Request $request
+     * @return redirect
+     */
+    public function response(Requests $request){
+
+        if(isset($request->orderId)){
+
+            $order = $this->order->find($request->orderId);
+
+            $user = $this->auth->user();
+
+            if (isset($user) && !empty($user))
+              if (!empty($order))
+                return redirect()->route('icommerce.orders.show', [$order->id]);
+              else
+                return redirect()->route('homepage')
+                  ->withSuccess(trans('icommerce::common.order_success'));
+            else
+              if (!empty($order))
+                return redirect()->route('icommerce.order.showorder', [$order->id, $order->key]);
+              else
+                return redirect()->route('homepage')
+                  ->withSuccess(trans('icommerce::common.order_success'));
+
+        }else{
+            return redirect()->route('homepage');
+        }
+       
+    }
 
    
 }

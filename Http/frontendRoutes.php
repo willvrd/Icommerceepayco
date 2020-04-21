@@ -10,8 +10,10 @@ use Illuminate\Routing\Router;
             'uses' => 'PublicController@index',
         ]);
 
-       
-       
+        $router->get('/response/{orderId}', [
+            'as' => 'icommerceepayco.response',
+            'uses' => 'PublicController@response',
+        ]);
 
        
     });
