@@ -16,11 +16,12 @@ return [
         'save configuration' => 'Save configuration to Epayco',
     ],
     'table' => [
-         'description' => 'Description',
+         'description' => 'Descripcion',
          'publicKey' => 'Public Key',
-         'activate' => 'Activate',
-         'test' => 'Mode test',
+         'activate' => 'Activar',
+         'test' => 'Modo test',
          'clientId' => 'Client Id',
+         'autoClick' => 'Desplegar el popup automaticamente al cargar la página',
     ],
     'form' => [
     ],

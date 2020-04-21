@@ -14,7 +14,6 @@
       <div class="card text-center">
         <h5 class="card-header bg-primary text-white">ePayco - Bienvenido</h5>
         <div class="card-body">
-          
           <p class="card-text">Haz click en el botón para iniciar el proceso de pago</p>
           <form>
             <script
@@ -26,16 +25,15 @@
                   data-epayco-description="{{$config->description}}"
                   data-epayco-currency="{{$order->currency_code}}"
                   data-epayco-country="{{$order->payment_country}}"
-                  data-epayco-test="{{$config->test}}"
+                  data-epayco-test="{{$config->test ? 'true':'false'}}"
                   data-epayco-external="false"
                   data-epayco-response="{{$config->responseUrl}}"
                   data-epayco-confirmation="{{$config->confirmationUrl}}"
                   data-epayco-invoice="{{$orderID}}"
                   data-epayco-extra1="{{$order->id}}"
-                  data-epayco-autoclick="true">
+                  data-epayco-autoclick="{{$config->autoClick ? 'true':'false'}}">
             </script>
           </form>
-          
         </div>
       </div>
  

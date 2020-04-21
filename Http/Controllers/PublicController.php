@@ -71,7 +71,6 @@ class PublicController extends BasePublicController
             $config->epaycoUrl = $this->epaycoUrl;
             $config->confirmationUrl = $this->confirmationUrl;
             $config->responseUrl = route("icommerceepayco.response",$orderID);
-            $config->test = (boolean)$config->test;
 
             $orderID = $orderID."-".time();
             

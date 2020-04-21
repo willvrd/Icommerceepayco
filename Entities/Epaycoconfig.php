@@ -21,6 +21,7 @@ class Epaycoconfig
         $this->description = setting('icommerceEpayco::description');
         $this->publicKey = setting('icommerceEpayco::publicKey');
         $this->clientId = setting('icommerceEpayco::clientId');
+        $this->autoClick = setting('icommerceEpayco::autoClick');
         $this->test = setting('icommerceEpayco::test');
         $this->image = setting('icommerceEpayco::image');
         $this->status = setting('icommerceEpayco::status');
@@ -32,6 +33,7 @@ class Epaycoconfig
             'description' => $this->description,
             'publicKey' => $this->publicKey,
             'clientId' => $this->clientId,
+            'autoClick' => $this->autoClick,
             'test' => $this->test,
             'image' => url($this->image),
             'status' => $this->status

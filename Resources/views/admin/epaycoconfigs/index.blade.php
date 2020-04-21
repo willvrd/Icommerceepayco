@@ -36,7 +36,15 @@
         	<option value="1" @if(!empty($configuration) && $configuration->test==1) selected @endif>YES</option>
             <option value="0" @if(!empty($configuration) && $configuration->test==0) selected @endif>NO</option>
         </select>
-    </div>
+	</div>
+	
+	<div class="form-group">
+        <label for="autoClick">*{{trans('icommerceepayco::epaycoconfigs.table.autoClick')}}</label>
+        <select class="form-control" id="autoClick" name="autoClick" required>
+			<option value="0" @if(!empty($configuration) && $configuration->autoClick==0) selected @endif>NO</option>
+        	<option value="1" @if(!empty($configuration) && $configuration->autoClick==1) selected @endif>YES</option>
+        </select>
+	</div>
 
     <div class="form-group">
 	    <div>
