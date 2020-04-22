@@ -1,7 +1,5 @@
-# asgardcms-icommerceepayco
-
-    ePayco - Payment Method - AsgadCMS - Laravel
-
+# AsgardCMS (Laravel) - Module - Payment Method - ePayco
+    
 ### Data Configuration Example
 
 - publicKey: 
@@ -9,3 +7,5 @@
 
 - cliendId:
     xxxx
+
+- Mode Test or Production
