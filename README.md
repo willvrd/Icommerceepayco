@@ -1,6 +1,9 @@
 # AsgardCMS (Laravel) - Module
-## Ecommerce -  Payment Method
-### ePayco
+## Payment Method - ePayco
+
+#### Requirements
+
+- Icommerce Module
     
 #### Data Configuration Example
 
@@ -10,4 +13,5 @@
 - cliendId:
     xxxx
 
-- Mode Test or Production
+- Mode:
+    Test or Production
