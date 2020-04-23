@@ -153,7 +153,7 @@ class Epayco
     }
 
     /**
-     * Get Status to Order and Emails Params
+     * Fixes to Send Email
      * @param Int orderId
      * @param Array inforStatusEmail
      */
@@ -196,17 +196,15 @@ class Epayco
         ]);
                
         // Send Admin
-        /*
         icommerce_emailSend([
             'email_from'=>[$email_from],
-            'theme' => $inforEmail['msjTheme'],
+            'theme' => $inforStatusEmail['msjTheme'],
             'email_to' => $email_to,
-            'subject' => $inforEmail['msjSubject'], 
+            'subject' => $inforStatusEmail['msjSubject'], 
             'sender'=>$sender,
-            'data' => array('title' => $inforEmail['msjSubject'],'intro'=> $inforEmail['msjIntro'],'content'=>$content)
+            'data' => array('title' => $inforStatusEmail['msjSubject'],'intro'=> $inforStatusEmail['msjIntro'],'content'=>$content)
         ]);
-        */
-
+        
     }
 
 }
