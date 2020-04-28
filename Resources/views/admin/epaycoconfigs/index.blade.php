@@ -30,6 +30,8 @@
 
 	{!! Form::normalInput('clientId', '*'.trans('icommerceepayco::epaycoconfigs.table.clientId'), $errors,$configuration,$options) !!}
 
+	{!! Form::normalInput('pKey', '*'.trans('icommerceepayco::epaycoconfigs.table.pKey'), $errors,$configuration,$options) !!}
+
 	<div class="form-group">
         <label for="test">*{{trans('icommerceepayco::epaycoconfigs.table.test')}}</label>
         <select class="form-control" id="test" name="test" required>

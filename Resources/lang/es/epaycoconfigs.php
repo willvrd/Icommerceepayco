@@ -21,6 +21,7 @@ return [
          'activate' => 'Activar',
          'test' => 'Modo test',
          'clientId' => 'Client Id',
+         'pKey' => 'P_KEY',
          'autoClick' => 'Desplegar el popup automaticamente al cargar la página',
     ],
     'form' => [

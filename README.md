@@ -11,7 +11,10 @@
     491d6a0b6e992cf924edd8d3d088aff1
 
 - cliendId:
-    xxxx
+    xxxxx
+
+- p_key:
+    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #### Data Configuration (PRODUCTION)
 

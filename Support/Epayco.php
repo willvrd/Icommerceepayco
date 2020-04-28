@@ -22,7 +22,7 @@ class Epayco
     public function getSignature($request){
 
         $p_cust_id_cliente = $this->config->clientId;
-        $p_key             = $this->config->publicKey;
+        $p_key             = $this->config->pKey;
 
         $x_ref_payco      = $request->x_ref_payco;
         $x_transaction_id = $request->x_transaction_id;

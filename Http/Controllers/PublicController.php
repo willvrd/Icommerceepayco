@@ -55,8 +55,12 @@ class PublicController extends BasePublicController
 
         try {
 
-            //$orderID = 13; // Testing orderId
-            $orderID = session('orderID');
+            
+            if(session('orderID'))
+              $orderID = session('orderID');
+            else
+              throw new \Exception('Error Not Session', 204);
+            
             \Log::info('Module Icommerceepayco: Index-ID:'.$orderID);
 
             $order = $this->order->find($orderID);
